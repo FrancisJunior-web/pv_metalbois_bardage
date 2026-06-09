@@ -41,12 +41,11 @@ export interface EtatSurface {
 export interface PartieCourante {
   [key: string]: string;
   calage: string;
-  pannes: string;
-  alignement: string;
-  fixation: string;
-  entraxe: string;
-  contRives: string;
-  contAppuis: string;
+  Entraxepoteaux: string;
+  Entraxesecondaire: string;
+  Alignemententrepoteaux: string;
+  niveauxdepart: string;
+  appuisdanslesangles: string;
 }
 
 export interface Releves {

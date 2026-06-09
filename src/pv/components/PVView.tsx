@@ -157,8 +157,6 @@ export default function PVView({ pv, onBack, onPDF, onEdit }: PVViewProps) {
           <Row label="Chantier" value={pv.name} />
           <Row label="Zone / Bâtiment" value={pv.zone} />
           <Row label="Agence" value={pv.agency} />
-          <Row label="Email 1" value={pv.email1} />
-          <Row label="Email 2" value={pv.email2} />
           <Row label="Établissement" value={pv.etablissement} />
           <Row label="Responsable" value={pv.responsable} />
           <Row label="Plan de repérage joint à la réception" value={pv.planReperage} />

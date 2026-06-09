@@ -31,15 +31,7 @@ export const renderStep1 = (
       </div>
     </div>
 
-    <div className="field-wrap">
-      <label className="lbl">Email 1</label>
-      <input className="inp" type="text" placeholder="Adresse email 1" value={form.email1} onChange={(event) => setForm((current) => ({ ...current, email1: event.target.value }))} autoComplete="off" />
-    </div>
-
-    <div className="field-wrap">
-      <label className="lbl">Email 2</label>
-      <input className="inp" type="text" placeholder="Adresse email 2" value={form.email2} onChange={(event) => setForm((current) => ({ ...current, email2: event.target.value }))} autoComplete="off" />
-    </div>
+   
 
     <div className="field-wrap">
       <label className="lbl">Établissement</label>
