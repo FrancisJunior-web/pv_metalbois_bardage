@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import "./pv/styles.css";
-import { AnnotationModal, PDFViewer, PhotoGallery, PhotoMenu, ProfileModal } from "./pv/components/index";
-import { I } from "./pv/icons";
-import { CURRENT_USER, SAMPLE_PVS, SURFACE_FIELDS, PARTIE_COURANTE_FIELDS, RELEVES_FIELDS, POINT_FIELDS } from "./pv/schema";
+import "./styles.css";
+import { AnnotationModal, PDFViewer, PhotoGallery, PhotoMenu, ProfileModal } from "./components/index";
+import { I } from "./icons";
+import { CURRENT_USER, SAMPLE_PVS, SURFACE_FIELDS, PARTIE_COURANTE_FIELDS, RELEVES_FIELDS, POINT_FIELDS } from "./schema";
 import {
   createPdfDataFromPV,
   createInitialPartieCourante,
@@ -11,33 +11,32 @@ import {
   pickImages,
   uid,
   useToast,
-} from "./pv/helpers";
+} from "./helpers";
 import {
   useAppState,
   useReserveManagement,
   useParticipantManagement,
   useFormManagement,
   usePVOperations,
-} from "./pv/hooks/index";
+} from "./hooks/index";
 import {
   renderStep1,
   renderStep2,
   renderStep3,
   renderStep4,
   renderStep5,
-} from "./pv/components/StepRenderers";
-import { renderStep6 } from "./pv/components/ParticipantStepRenderer";
-import { renderReserveCard, renderReserveContent, renderReserveList } from "./pv/components/ReserveRenderer";
-import { renderSplashScreen, renderHomeScreen } from "./pv/components/ScreenRenderers";
-import SuccessScreen from "./pv/components/SuccessScreen";
-import type { PV, Reserve, SavePVResult } from "./pv/types";
+} from "./components/StepRenderers";
+import { renderStep6 } from "./components/ParticipantStepRenderer";
+import { renderReserveCard, renderReserveContent, renderReserveList } from "./components/ReserveRenderer";
+import { renderSplashScreen, renderHomeScreen } from "./components/ScreenRenderers";
+import SuccessScreen from "./components/SuccessScreen";
+import type { PV, Reserve, SavePVResult } from "./types";
 
 export default function App() {
   const appState = useAppState();
   const { toasts, push: toast } = useToast();
   const [pvList, setPvList] = React.useState<PV[]>(SAMPLE_PVS);
   const [search, setSearch] = React.useState("");
-  const [step2Errors, setStep2Errors] = React.useState<Record<string, { photo: boolean; comment: boolean }>>({});
   const [lastSavedResult, setLastSavedResult] = React.useState<SavePVResult | null>(null);
 
   const reserveManagement = useReserveManagement(toast);
@@ -114,21 +113,6 @@ export default function App() {
   };
 
   const nextStep = () => {
-    if (appState.step === 2) {
-      const errors: Record<string, { photo: boolean; comment: boolean }> = {};
-      SURFACE_FIELDS.forEach(([key]) => {
-        if (formMgmt.etatSurface[key] !== "Non Conforme") return;
-        const photos = (formMgmt.etatSurface[key + "Photos"] as { id: number; url: string }[]) || [];
-        const comment = (formMgmt.etatSurface[key + "Comment"] as string || "").trim();
-        if (photos.length === 0 || !comment) errors[key] = { photo: photos.length === 0, comment: !comment };
-      });
-      if (Object.keys(errors).length > 0) {
-        setStep2Errors(errors);
-        toast("Photo(s) et commentaire requis pour chaque champ Non Conforme", "error");
-        return;
-      }
-      setStep2Errors({});
-    }
     if (appState.step < 6) appState.setStep((current) => current + 1);
   };
 
@@ -240,30 +224,7 @@ export default function App() {
     }
 
     if (appState.step === 2) {
-      return renderStep2(
-        formMgmt.etatSurface,
-        formMgmt.setEtatSurface,
-        step2Errors,
-        async (key) => {
-          const images = await pickImages();
-          const current = (formMgmt.etatSurface[key + "Photos"] as { id: number; url: string }[]) || [];
-          const slots = 5 - current.length;
-          if (slots > 0) {
-            formMgmt.setEtatSurface((curr) => ({
-              ...curr,
-              [key + "Photos"]: [...current, ...images.slice(0, slots).map((img) => ({ ...img, id: uid() }))],
-            }));
-          }
-        },
-        (key, photoId) => {
-          formMgmt.setEtatSurface((curr) => ({
-            ...curr,
-            [key + "Photos"]: ((curr[key + "Photos"] as { id: number; url: string }[]) || []).filter((p) => p.id !== photoId),
-          }));
-        },
-        (menu) => appState.setPhotoMenu(menu),
-        (photos, title, key) => appState.setGallery({ photos: [...photos], title, key }),
-      );
+      return renderStep2(formMgmt.etatSurface, formMgmt.setEtatSurface);
     }
 
     if (appState.step === 3) {
