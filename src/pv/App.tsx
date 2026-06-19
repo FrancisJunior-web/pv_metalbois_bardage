@@ -198,7 +198,7 @@ export default function App() {
         (val) => reserveManagement.setRForm((curr) => ({ ...curr, localisation: val })),
         (val) => reserveManagement.setRForm((curr) => ({ ...curr, detail: val })),
         () => appState.setReserveScreen("list"),
-        () => { if (reserveManagement.saveReserve()) appState.setReserveScreen("list"); },
+        () => { if (reserveManagement.saveReserve()) appState.setReserveScreen("view-list"); },
         reserveManagement.saveAndAddAnother,
         appState.setLightbox,
         (menu) => appState.setPhotoMenu(menu),

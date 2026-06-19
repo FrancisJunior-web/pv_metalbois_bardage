@@ -79,8 +79,8 @@ export const renderStep6 = (
           <div className="inline-lbl">Réception acceptée ?</div>
         </div>
         <div className="yn-group">
-          <button className={`yn-btn ${participants[0]?.reception === "OUI" ? "active-oui" : ""}`} disabled style={{ cursor: "default", opacity: participants[0]?.reception === "OUI" ? 1 : 0.4 }}>OUI</button>
-          <button className={`yn-btn ${participants[0]?.reception === "NON" ? "active-non" : ""}`} disabled style={{ cursor: "default", opacity: participants[0]?.reception === "NON" ? 1 : 0.4 }}>NON</button>
+          <button className={`yn-btn ${participants[0]?.reception === "OUI" ? "active-oui" : ""}`} onClick={() => onUpdateParticipant(participants[0].id, "reception", participants[0]?.reception === "OUI" ? "" : "OUI")}>OUI</button>
+          <button className={`yn-btn ${participants[0]?.reception === "NON" ? "active-non" : ""}`} onClick={() => onUpdateParticipant(participants[0].id, "reception", participants[0]?.reception === "NON" ? "" : "NON")}>NON</button>
         </div>
       </div>
 
